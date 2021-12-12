@@ -5,7 +5,7 @@
 
 
 
-std::unordered_map<std::string, OperatorOverloads> DefaultOper = {
+std::unordered_map<std::string, OperatorOverloads> DefaultOperatorManager = {
         {"+", {{MapElement<std::plus, int>, MapElement<std::plus, std::string>}}},
         {"-", {{MapElement<std::minus, int>}}},
         {"*", {{MapElement<std::multiplies, int>}}},
@@ -21,5 +21,5 @@ std::unordered_map<std::string, OperatorOverloads> DefaultOper = {
 
 
 std::unordered_map<std::string, OperatorOverloads> GetDefaultOperationManager() {
-    return DefaultOper;
+    return DefaultOperatorManager;
 }

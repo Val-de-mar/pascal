@@ -6,13 +6,16 @@ var
 
 begin
     newint := 10;
-
+    scan(newint);
     scan(str);
     
     if newint == 10 then
         Writeln(str)
-    else 
-        newint := 5;
+    else
+        begin
+            newint := newint + 5;
+            Writeln(newint);
+        end;
 
 
 end.

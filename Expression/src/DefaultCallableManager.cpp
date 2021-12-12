@@ -6,31 +6,36 @@
 #include "BuiltInTypesId.h"
 #include <iostream>
 
+template<class T>
 auto Writeln = [](std::vector<std::shared_ptr<VariableT>> str) {
-    std::cout << get<std::string>(*(str[0])) << '\n';
+    std::cout << std::get<T>(*(str[0])) << '\n';
     return std::make_shared<VariableT>();
 };
-const static std::vector<size_t> WritelnSignature = {getId<std::string>};
 
 const static FunctionOverloads WritelnMapElem = {
         .overloads = {
-                {FunctionSignature{WritelnSignature},
-                 FunctionOverload{.func = {Writeln}, .return_type = getId<void>}}
+                {FunctionSignature{{getId<std::string>}},
+                 FunctionOverload{.func = {Writeln<std::string>}, .return_type = getId<void>}},
+                {FunctionSignature{{getId<int>}},
+                 FunctionOverload{.func = {Writeln<int>}, .return_type = getId<void>}}
+
         }
 };
 
+template<class T>
 auto scan = [](std::vector<std::shared_ptr<VariableT>> str) {
-    std::string s;
+    T s;
     std::cin >> s;
     *(str[0]) = s;
     return std::make_shared<VariableT>();
 };
-const static std::vector<size_t> scanSignature = {getId<std::string>};
 
 const static FunctionOverloads scanMapElem = {
         .overloads = {
-                {FunctionSignature{scanSignature},
-                 FunctionOverload{.func = {scan}, .return_type = getId<void>}}
+                {FunctionSignature{{getId<std::string>}},
+                 FunctionOverload{.func = {scan<std::string>}, .return_type = getId<void>}},
+                {FunctionSignature{{getId<int>}},
+                 FunctionOverload{.func = {scan<int>}, .return_type = getId<void>}}
         }
 };
 

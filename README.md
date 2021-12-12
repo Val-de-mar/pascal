@@ -7,5 +7,6 @@ In the fisrt iteratin was implemented:
     every type and operator from c++ can be easily transfered by addition it into DefaultOperatorManager, using type traits of BuiltInOperations.h file
     basic interpretier with arythmetics, if-then-else condition and input/output
 
-code will be covered by tests in the second iteration
+There is a code example in file input
+Code will be covered by tests in the second iteration
 
