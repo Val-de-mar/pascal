@@ -1,0 +1,18 @@
+program HelloWorld;
+
+var
+    newint : integer;
+    str: string;
+
+begin
+    newint := 10;
+
+    scan(str);
+    
+    if newint == 10 then
+        Writeln(str)
+    else 
+        newint := 5;
+
+
+end.

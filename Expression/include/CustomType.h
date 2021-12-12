@@ -1,0 +1,14 @@
+//
+// Created by val-de-mar on 9/12/21.
+//
+
+#ifndef EXPRESSIONMEMENTOCREATION_CUSTOMTYPE_H
+#define EXPRESSIONMEMENTOCREATION_CUSTOMTYPE_H
+
+
+class CustomType {
+    /* to do */
+};
+
+
+#endif //EXPRESSIONMEMENTOCREATION_CUSTOMTYPE_H
