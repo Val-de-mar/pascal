@@ -59,8 +59,13 @@
     ELSEKEYWORD "else"
     WHILEKEYWORD "while"
     DOKEYWORD "do"
+    FUNCTION "function"
     EQUAL "=="
     NOTEQUAL "!="
+    LESS "<"
+    LESSEQUAL "<="
+    GREATER ">"
+    GREATEREQUAL ">="
 ;
 
 %token <std::string> IDENTIFIER "identifier"
@@ -73,6 +78,8 @@
 %nterm <std::vector<std::unique_ptr<Expression>>> exp_block
 %nterm <std::unique_ptr<SequenceExpression>> code
 %nterm <std::unique_ptr<Expression>> assignment
+%nterm <std::pair<std::vector<std::string>, std::vector<size_t>>> signature
+%nterm <std::pair<std::vector<std::string>, std::vector<size_t>>> local_init
 
 // Prints output in parsing option for debugging location terminal
 %printer { yyo << 0; } <*>;
@@ -82,7 +89,7 @@
 %left "*" "/";
 
 %start program;
-program: name init code_block {
+program: name init declarations code_block {
     std::cout << "\nthat's all\n";
 
 };
@@ -109,6 +116,45 @@ init_exp:
     | error ";" {
     	// Hint for compilation error, resuming producing messages
     	std::cerr << "You should provide declaration in the form: variable : type ; " << std::endl;
+    };
+
+
+
+declarations:
+    %empty {}
+    | declarations "function" "identifier" "(" signature ")" ":" "identifier" ";" local_init exp ";" {
+        auto func = new CustomFunction (
+                    $3,
+                    driver.declared_types[$8],
+                    driver.global,
+                    std::unique_ptr<Expression>(std::move($11)),
+                    $5.first,
+                    $5.second,
+                    $10.first,
+                    $10.second
+                    );
+        driver.global.declareFunction($3, {func->arg_types}, {
+                {[expression = std::shared_ptr<CustomFunction>(func)](std::vector<std::shared_ptr<VariableT>> values){
+                    return (*expression)(values);
+                }}, func->return_type
+                });
+    };
+
+signature:
+    %empty { $$ = {{},{}};}
+    | "identifier" ":" "identifier" { $$ = {{$1}, {driver.declared_types[$3]}};}
+    | signature "," "identifier" ":" "identifier" {
+        $$ = std::move($1);
+        $$.first.push_back($3);
+        $$.second.push_back(driver.declared_types[$5]);
+    };
+
+local_init:
+    "var" { $$ = {{},{}};}
+    | signature "identifier" ":" "identifier" ";" {
+        $$ = std::move($1);
+        $$.first.push_back($2);
+        $$.second.push_back(driver.declared_types[$4]);
     };
 
 code_block: exp "." {
@@ -199,6 +245,18 @@ exp_priority4:
     }
     | exp_priority4 "!=" exp_priority3 {
         $$ = std::unique_ptr<Expression>(new BinaryOperation{"!=", std::move($1), std::move($3)});
+    }
+    | exp_priority4 "<" exp_priority3 {
+            $$ = std::unique_ptr<Expression>(new BinaryOperation{"<", std::move($1), std::move($3)});
+    }
+    | exp_priority4 "<=" exp_priority3 {
+        $$ = std::unique_ptr<Expression>(new BinaryOperation{"<=", std::move($1), std::move($3)});
+    }
+    | exp_priority4 ">" exp_priority3 {
+            $$ = std::unique_ptr<Expression>(new BinaryOperation{">", std::move($1), std::move($3)});
+    }
+    | exp_priority4 ">=" exp_priority3 {
+        $$ = std::unique_ptr<Expression>(new BinaryOperation{">=", std::move($1), std::move($3)});
     };
 
 exp_block:

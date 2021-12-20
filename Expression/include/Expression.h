@@ -103,6 +103,7 @@ public:
 class CustomFunction {
 public:
     std::string self_name;
+    size_t return_type;
     mutable VariableManager local;
     mutable std::unique_ptr<Expression> commands;
     std::vector<std::string> arg_names;
@@ -110,8 +111,9 @@ public:
     std::vector<std::string> local_names;
     std::vector<size_t> local_types;
 
-    CustomFunction(std::string self_name, VariableManager manager, std::unique_ptr<Expression> commands, std::vector<std::string> arg_names, std::vector<size_t> arg_types, std::vector<std::string> local_names, std::vector<size_t> local_types)
+    CustomFunction(std::string self_name, size_t return_type, VariableManager manager, std::unique_ptr<Expression> commands, std::vector<std::string> arg_names, std::vector<size_t> arg_types, std::vector<std::string> local_names, std::vector<size_t> local_types)
             : self_name(std::move(self_name)),
+              return_type(return_type),
               local(std::move(manager)),
               commands(std::move(commands)),
               arg_names(std::move(arg_names)),
@@ -121,6 +123,7 @@ public:
     }
 
     std::shared_ptr<VariableT> operator()(const std::vector<std::shared_ptr<VariableT>> & values) const {
+        local.declare(self_name, return_type, std::make_shared<VariableT>());
         for(int i = 0; i < values.size() && i < arg_names.size(); ++i) {
             auto ptr = std::make_shared<VariableT>(*values[i]);
             local.declare(arg_names[i], arg_types[i], ptr);
@@ -129,14 +132,17 @@ public:
             auto ptr = std::make_shared<VariableT>();
             local.declare(local_names[i], local_types[i], ptr);
         }
-        auto name = commands->calculate(local);
+        auto tmp = commands->calculate(local);
+        local.getVar(tmp);
         for (int i = 0; i < values.size() && i < arg_names.size(); ++i) {
             local.remove(arg_names[i]);
         }
         for (int i = 0; i < local_names.size(); ++i) {
             local.remove(local_names[i]);
         }
-        return local.getVar(name);
+        auto ans = local.getVar(self_name);
+        local.remove(self_name);
+        return ans;
     }
 };
 

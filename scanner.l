@@ -85,6 +85,7 @@ blank [ \t\r]
 "else"     return yy::parser::make_ELSEKEYWORD (loc);
 "while"    return yy::parser::make_WHILEKEYWORD (loc);
 "do"       return yy::parser::make_DOKEYWORD (loc);
+"function" return yy::parser::make_FUNCTION (loc);
 "+"        return yy::parser::make_PLUS   (loc);
 "*"        return yy::parser::make_STAR   (loc);
 "/"        return yy::parser::make_SLASH  (loc);
@@ -96,6 +97,10 @@ blank [ \t\r]
 "."        return yy::parser::make_DOT (loc);
 "=="       return yy::parser::make_EQUAL (loc);
 "!="       return yy::parser::make_NOTEQUAL (loc);
+"<"        return yy::parser::make_LESS (loc);
+"<="       return yy::parser::make_LESSEQUAL (loc);
+">"        return yy::parser::make_GREATER (loc);
+">="       return yy::parser::make_GREATEREQUAL (loc);
 
 {int}      return make_NUMBER(yytext, loc);
 {id}       {

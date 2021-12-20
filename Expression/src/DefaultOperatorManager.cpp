@@ -16,7 +16,9 @@ std::unordered_map<std::string, OperatorOverloads> DefaultOperatorManager = {
         {"==", {{MapElement<std::equal_to, int>}}},
         {"!=", {{MapElement<std::not_equal_to, int>}}},
         {"<", {{MapElement<std::less, int>}}},
-        {"<=", {{MapElement<std::less_equal, int>}}}
+        {"<=", {{MapElement<std::less_equal, int>}}},
+        {">", {{MapElement<std::greater, int>}}},
+        {">=", {{MapElement<std::greater_equal, int>}}}
 };
 
 

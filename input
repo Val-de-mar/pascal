@@ -4,13 +4,17 @@ var
     newint : integer;
     str: string;
 
+function print (ss : string) : integer;
+var
+Writeln(ss);
+
 begin
     newint := 10;
     scan(newint);
     scan(str);
     
-    if newint == 10 then
-        Writeln(str)
+    if newint >= 0 then
+        print(str)
     else
         begin
             newint := newint + 5;

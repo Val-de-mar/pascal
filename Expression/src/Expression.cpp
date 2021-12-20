@@ -45,8 +45,10 @@ CycleExpression::CycleExpression(std::unique_ptr<Expression> condition, std::uni
 
 std::string ConditionExpression::calculate(VariableManager &manager) {
     if (std::get<bool>(*(manager.getVar(condition->calculate(manager))))) {
+        std::cerr << "true\n";
         if_branch->calculate(manager);
     } else {
+        std::cerr << "false\n";
         else_branch->calculate(manager);
     }
     return manager.newRvalue(getId<void>, std::make_shared<VariableT>());
