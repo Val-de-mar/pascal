@@ -83,6 +83,8 @@ blank [ \t\r]
 "if"       return yy::parser::make_IFKEYWORD (loc);
 "then"     return yy::parser::make_THENKEYWORD (loc);
 "else"     return yy::parser::make_ELSEKEYWORD (loc);
+"while"    return yy::parser::make_WHILEKEYWORD (loc);
+"do"       return yy::parser::make_DOKEYWORD (loc);
 "+"        return yy::parser::make_PLUS   (loc);
 "*"        return yy::parser::make_STAR   (loc);
 "/"        return yy::parser::make_SLASH  (loc);

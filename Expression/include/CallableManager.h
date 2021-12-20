@@ -13,12 +13,16 @@
 #include "FunctionOverloads.h"
 #include "DefaultCallableManager.h"
 
+struct EmptyCallableManager{};
+
 class CallableManager {
     std::unordered_map<std::string, FunctionOverloads> operators;
 public:
     CallableManager() : operators(GetDefaultCallableManager()) {}
+    CallableManager(EmptyCallableManager) : operators() {}
 
     const FunctionOverload &get(const std::string &name, std::vector<size_t> signature);
+    void declare(std::string name, FunctionSignature sign, FunctionOverload func);
 };
 
 

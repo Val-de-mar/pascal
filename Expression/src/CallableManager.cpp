@@ -11,3 +11,7 @@ const FunctionOverload &CallableManager::get(const std::string &name, std::vecto
     }
     return iter->second.get(std::move(signature));
 }
+
+void CallableManager::declare(std::string name, FunctionSignature sign, FunctionOverload func) {
+    operators[std::move(name)].overloads.insert({std::move(sign), std::move(func)});
+}

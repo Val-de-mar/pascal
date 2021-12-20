@@ -15,11 +15,13 @@
 #include "DefaultOperatorManager.h"
 #include "OperatorOverloads.h"
 
+struct EmptyOperatorManager {};
 
 class OperatorManager {
     std::unordered_map<std::string, OperatorOverloads> operators;
 public:
     OperatorManager() : operators(GetDefaultOperationManager()) {}
+    OperatorManager(EmptyOperatorManager) : operators() {}
 
     const OperatorOverload &get(const std::string &operator_name, size_t left_type, size_t right_type);
 };

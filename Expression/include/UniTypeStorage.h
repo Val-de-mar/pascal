@@ -76,6 +76,11 @@ public:
         return name;
     }
 
+    void remove(const std::string &name) {
+        static_assert(Lifetime);
+        dictionary.erase(name);
+    }
+
 };
 
 

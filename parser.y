@@ -57,6 +57,8 @@
     IFKEYWORD "if"
     THENKEYWORD "then"
     ELSEKEYWORD "else"
+    WHILEKEYWORD "while"
+    DOKEYWORD "do"
     EQUAL "=="
     NOTEQUAL "!="
 ;
@@ -163,6 +165,12 @@ exp_priority1:
                 std::move($6)
             )
         );
+    } | "while" exp "do" exp {
+        $$ = std::unique_ptr<Expression> ( new CycleExpression (
+                        std::move($2),
+                        std::move($4)
+                    )
+                );
     };
 
 

@@ -75,3 +75,21 @@ std::string VariableManager::newRvalue(size_t type, const std::shared_ptr<Variab
     types.insert({ans, type});
     return ans;
 }
+
+bool VariableManager::remove(const std::string& name) {
+    size_t type;
+    {
+        auto iter = types.find(name);
+        if (iter == types.end()) {
+            return false;
+        }
+        type = iter->second;
+    }
+    types.erase(name);
+    storage[type].remove(name);
+    return true;
+}
+
+void VariableManager::declareFunction(std::string name, FunctionSignature sign, FunctionOverload func) {
+    callable.declare(std::move(name),std::move(sign), std::move(func));
+}
